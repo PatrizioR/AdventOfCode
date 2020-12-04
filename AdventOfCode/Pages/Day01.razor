@@ -1,0 +1,23 @@
+﻿@page "/day1"
+
+<h3>day01</h3>
+<textarea @bind="@inputUnformatted"></textarea>
+<label>Message:</label><span>@msg</span>
+<button @onclick="FindMultiplierOf2020">Calc</button>
+@code {
+    public string inputUnformatted { get; set; }
+    public string msg { get; set; }
+    public void FindMultiplierOf2020()
+    {
+        msg = "";
+        if (string.IsNullOrEmpty(inputUnformatted))
+        {
+            StateHasChanged();
+            msg = "No input";
+            return;
+        }
+        var result = Shared.NumberProductHelper.FindNumbers(inputUnformatted, 3);
+        msg = $"{result.Item1} * {result.Item2} * {result.Item3} = {result.Item1 * result.Item2 * result.Item3}";
+
+    }
+}

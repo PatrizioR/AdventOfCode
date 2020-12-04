@@ -1,0 +1,39 @@
+﻿@page "/day3"
+<h3>day03</h3>
+<textarea cols="100" rows="100" @bind="@inputUnformatted"></textarea>
+
+<label>Jumps right</label>
+<input @bind="jumpsRight" />
+<label>Jumps down</label>
+<input @bind="jumpsDown" />
+
+<label>Message:</label><span>@msg</span>
+
+<button @onclick="Find">Count tree pass</button>
+@code {
+    public string jumpsDown { get; set; }
+    public string jumpsRight { get; set; }
+    public string inputUnformatted { get; set; }
+    public string msg { get; set; }
+    public void Find()
+    {
+        msg = "";
+        if (string.IsNullOrEmpty(inputUnformatted))
+        {
+            StateHasChanged();
+            msg = "No input";
+            return;
+        }
+
+        var jumpDownList = jumpsDown.Split(",").Select(item => item.Trim()).Select(item => int.Parse(item)).ToArray();
+        var jumpRightList = jumpsRight.Split(",").Select(item => item.Trim()).Select(item => int.Parse(item)).ToArray();
+
+        var mult = 1;
+        for (int i = 0; i < jumpDownList.Count(); i++)
+        {
+            mult *= Shared.TreePassHelper.CountTrees(inputUnformatted, jumpRightList[i], jumpDownList[i]);
+        }
+
+        msg = $"Found {mult}";
+    }
+}

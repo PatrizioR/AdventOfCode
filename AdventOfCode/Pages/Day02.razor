@@ -1,0 +1,21 @@
+﻿@page "/day2"
+<h3>day02</h3>
+<textarea cols="100" rows="100" @bind="@inputUnformatted"></textarea>
+<label>Message:</label><span>@msg</span>
+<button @onclick="FindValidPasswordCount">Count valid passwords</button>
+@code {
+    public string inputUnformatted { get; set; }
+    public string msg { get; set; }
+    public void FindValidPasswordCount()
+    {
+        msg = "";
+        if (string.IsNullOrEmpty(inputUnformatted))
+        {
+            StateHasChanged();
+            msg = "No input";
+            return;
+        }
+        var result = Shared.ValidPasswordHelper.CountValidPasswordsSecond(inputUnformatted);
+        msg = $"Found {result} valid passwords";
+    }
+}

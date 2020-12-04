@@ -1,0 +1,32 @@
+﻿@page "/day4"
+<h3>day04</h3>
+<textarea cols="100" rows="100" @bind="@inputUnformatted"></textarea>
+<label>Message:</label><span>@msg</span>
+
+<button @onclick="Find">Find</button>
+@code {
+    public string inputUnformatted { get; set; }
+    public string msg { get; set; }
+    public void Find()
+    {
+        msg = "";
+        if (string.IsNullOrEmpty(inputUnformatted))
+        {
+            StateHasChanged();
+            msg = "No input";
+            return;
+        }
+
+        var result = Shared.PassportHelper.CountValid(inputUnformatted, new string[] { "byr", "iyr", "eyr", "hgt","hcl","ecl", "pid" }, new string[] { "cid" }, new Dictionary<string, string>() { 
+            { "byr", @"^(19[2-9]\d|20(0[0-2]))$" },
+            { "iyr", @"^20(1\d|20)$" },
+            { "eyr", @"^20(2\d|30)$" },
+            { "hgt", @"^(1(5\d|6\d|7\d|8\d|9(0|1|2|3))+cm|(59|6\d|7(0|1|2|3|4|5|6))in)$" },
+            { "hcl", @"^#[0-9a-f]{6}$" },
+            { "ecl", @"amb|blu|brn|gry|grn|hzl|oth" },
+            { "pid", @"\d{9}" },
+        });
+
+        msg = $"Found {result}";
+    }
+}
