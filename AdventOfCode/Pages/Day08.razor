@@ -1,5 +1,5 @@
-﻿@page "/day7"
-<h3>day07</h3>
+﻿@page "/day8"
+<h3>day08</h3>
 <textarea cols="100" rows="100" @bind="@inputUnformatted"></textarea>
 <label>Message:</label><span>@msg</span>
 
@@ -17,7 +17,7 @@
             return;
         }
 
-        var result = Shared.BagHelper.CountDistinctWhereSearchInColors(inputUnformatted, "shiny gold");
+        var result = Shared.AssemblyHelper.CountAccAfterFix(inputUnformatted);
 
         msg = $"Found {result}";
     }

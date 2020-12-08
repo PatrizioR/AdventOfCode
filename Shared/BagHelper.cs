@@ -8,10 +8,71 @@ namespace AdventOfCode.Shared
 {
     public static class BagHelper
     {
-        public static int CountColors(string input, string search)
+        public static int CountDistinctWhereSearchInColors(string input, string search)
         {
             var facts = Map(input).Select(item => new FactItem(item)).ToList();
             return FindSearchColor(facts, search).Where(item => item != search).Distinct().Count();
+        }
+
+        public static int CountBagsInsideSearch(string input, string search)
+        {
+            var facts = Map(input).Select(item => new FactItem(item)).ToList();
+            FillFactItemDependencies(facts);
+            var start = facts.FirstOrDefault(item => item.What == search);
+
+            return FindBagsInside(facts, start, true);
+        }
+
+        private static int FindBagsInside(List<FactItem> facts, FactItem start, bool init = false)
+        {
+            var count = 0;
+            if(start == null)
+            {
+                return count;
+            }
+            count = init ? 0 : 1;
+            foreach(var item in start.ContainsFactItems)
+            {
+                count += (item.Value * FindBagsInside(facts, item.Key));
+            }
+
+            return count;
+        }
+
+        private static void FillFactItemDependencies(List<FactItem> rootFacts, FactItem currentItem = null)
+        {
+            if (currentItem == null)
+            {
+                foreach(var item in rootFacts)
+                {
+                    FillFactItemDependencies(rootFacts, item);
+                }
+                // start
+                return;
+            }
+
+            if (!currentItem.Contains.Any() || currentItem.ContainsFactItems.Any())
+            {
+                // end
+                return;
+            }
+
+            foreach(var item in currentItem.Contains)
+            {
+                var found = rootFacts.FirstOrDefault(rf => rf.What == item.Key);
+
+                if(found == null)
+                {
+                    continue;
+                }
+
+                currentItem.ContainsFactItems.Add(found, item.Value);
+            }
+
+            foreach(var item in currentItem.ContainsFactItems)
+            {
+                FillFactItemDependencies(rootFacts, item.Key);
+            }
         }
 
         private static List<string> FindSearchColor(List<FactItem> factItems, string search, FactItem currentFact = null)
@@ -67,6 +128,8 @@ namespace AdventOfCode.Shared
         {
             public string What { get; set; }
             public Dictionary<string, int> Contains { get; set; } = new Dictionary<string, int>();
+
+            public Dictionary<FactItem, int> ContainsFactItems { get; set; } = new Dictionary<FactItem, int>();
 
             public FactItem(string input)
             {
