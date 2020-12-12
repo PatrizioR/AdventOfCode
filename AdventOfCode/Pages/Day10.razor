@@ -1,0 +1,24 @@
+﻿@page "/day10"
+<h3>day10</h3>
+<textarea cols="100" rows="100" @bind="@inputUnformatted"></textarea>
+<label>Message:</label><span>@msg</span>
+
+<button @onclick="Find">Find</button>
+@code {
+    public string inputUnformatted { get; set; }
+    public string msg { get; set; }
+    public void Find()
+    {
+        msg = "";
+        if (string.IsNullOrEmpty(inputUnformatted))
+        {
+            StateHasChanged();
+            msg = "No input";
+            return;
+        }
+
+        var result = Shared.JoltageAdapterHelper.JoltMultChainDiff(inputUnformatted, 3, new() { 1, 3 });
+
+        msg = $"Found {result}";
+    }
+}

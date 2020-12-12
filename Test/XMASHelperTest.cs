@@ -1056,7 +1056,7 @@ namespace AdventOfCode.Test
 47486619521827
 66344036262629
 48919937954807
-53848654639099", 25, 100)]
+53848654639099", 25, 7409241)]
         public void FindWeaknessTest(string input, int lastEntries, int expected)
         {
             Assert.Equal(expected, XMASHelper.FindWeakness(input, lastEntries));
